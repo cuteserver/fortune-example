@@ -6,7 +6,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Concurrent Network WebSockets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Concurrent Network WebSockets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Concurrent Network WebSockets)
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     add_library(RemoteObjectsLib SHARED
