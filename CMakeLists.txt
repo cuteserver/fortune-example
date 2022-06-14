@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.7 FATAL_ERROR)
 project(Fortunes)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -27,11 +27,22 @@ endif()
 add_executable(FortunesApp
                FortunesClient.h
                Main.cpp)
-
-target_include_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/include)
-
-target_link_libraries(FortunesApp
-                      ${CUTE_CLIENT_SDK_DIR}/lib/libCuteClientSdk.so
+if (APPLE_MACOSX OR APPLE_IOS_DEVICE OR APPLE_IOS_SIMULATOR)
+    target_link_libraries(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/CuteClientSdk.framework)
+elseif(ANDROID_TARGET)
+    target_include_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/include)
+    target_link_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/lib/${ANDROID_ABI})
+    target_link_libraries(FortunesApp PRIVATE -lCuteClientSdk_${ANDROID_ABI})
+elseif (WIN32)
+    target_include_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/include)
+    target_link_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/lib)
+    target_link_libraries(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/lib/CuteClientSdk$<$<CONFIG:Debug>:d>.lib)
+else ()
+    target_include_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/include)
+    target_link_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/lib ${QT_SDK_DIR}/lib)
+    target_link_libraries(FortunesApp PRIVATE -lCuteClientSdk)
+endif ()
+target_link_libraries(FortunesApp PRIVATE
                       Qt${QT_VERSION_MAJOR}::Core
                       Qt${QT_VERSION_MAJOR}::Concurrent
                       Qt${QT_VERSION_MAJOR}::Network
