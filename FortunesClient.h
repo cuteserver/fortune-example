@@ -6,7 +6,11 @@
 #ifndef FORTUNES_CLIENT_H
 #define FORTUNES_CLIENT_H
 
+#if defined(__APPLE__)
+#include <CuteClientSdk/CuteClient.h>
+#else
 #include <CuteClient.h>
+#endif
 
 using namespace Cute::Client;
 

@@ -27,12 +27,8 @@ endif()
 add_executable(FortunesApp
                FortunesClient.h
                Main.cpp)
-if (APPLE_MACOSX OR APPLE_IOS_DEVICE OR APPLE_IOS_SIMULATOR)
+if (APPLE)
     target_link_libraries(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/CuteClientSdk.framework)
-elseif(ANDROID_TARGET)
-    target_include_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/include)
-    target_link_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/lib/${ANDROID_ABI})
-    target_link_libraries(FortunesApp PRIVATE -lCuteClientSdk_${ANDROID_ABI})
 elseif (WIN32)
     target_include_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/include)
     target_link_directories(FortunesApp PRIVATE ${CUTE_CLIENT_SDK_DIR}/lib)
